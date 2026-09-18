@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>《小石潭记》自主检测</title>
+    <title>《小石潭记》自主检测系统</title>
     <style>
         :root {
             --bg-color: #f4f0ea;
@@ -38,6 +38,48 @@
             font-size: 1.1rem;
             color: #666;
             margin-bottom: 20px;
+        }
+
+        /* 姓名输入遮罩层 */
+        #name-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            max-width: 350px;
+            width: 80%;
+        }
+
+        .modal-input {
+            font-family: inherit;
+            font-size: 1.2rem;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            margin: 15px 0;
+            width: 80%;
+            text-align: center;
+            outline: none;
+        }
+
+        /* 欢迎信息 */
+        .user-welcome {
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-weight: bold;
         }
 
         /* 标签页导航 */
@@ -109,7 +151,31 @@
             margin-bottom: 15px;
         }
 
-        /* 1. 字池拼句样式 */
+        /* 1. 字池拼句子入口按钮 */
+        .section-nav {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .sec-btn {
+            background: #eae3d2;
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            font-family: inherit;
+            font-size: 1.05rem;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .sec-btn.active {
+            background: #d4a373;
+            color: white;
+            font-weight: bold;
+        }
+
         .puzzle-section {
             text-align: center;
         }
@@ -215,12 +281,36 @@
             margin-top: 4px;
             font-weight: bold;
         }
+
+        /* 成功提示框 */
+        .success-banner {
+            background: #e8f5e9;
+            color: var(--success-color);
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            border: 1px solid #c8e6c9;
+        }
     </style>
 </head>
 <body>
 
+    <!-- 姓名输入弹窗 -->
+    <div id="name-modal">
+        <div class="modal-content">
+            <h2>欢迎来到背诵检测</h2>
+            <p>请输入你的姓名开始挑战：</p>
+            <input type="text" id="username-input" class="modal-input" placeholder="输入姓名..." autofocus>
+            <br>
+            <button class="btn" onclick="submitName()">开始检测</button>
+        </div>
+    </div>
+
     <h1>《小石潭记》自主检测</h1>
     <div class="subtitle">【唐】柳宗元</div>
+    <div id="welcome-msg" class="user-welcome"></div>
 
     <div class="nav-tabs">
         <button class="tab-btn active" onclick="switchTab('tab1')">第一关：字池拼句</button>
@@ -230,11 +320,20 @@
 
     <!-- 第一关：字池拼句 -->
     <div id="tab1" class="container active">
+        <!-- 分节入口导航 -->
+        <div class="section-nav">
+            <button class="sec-btn active" onclick="selectSection(1)">第一节</button>
+            <button class="sec-btn" onclick="selectSection(2)">第二节</button>
+            <button class="sec-btn" onclick="selectSection(3)">第三节</button>
+            <button class="sec-btn" onclick="selectSection(4)">第四节</button>
+        </div>
+
         <div class="puzzle-section">
-            <div style="font-size: 1.2rem; margin-bottom: 10px;">
-                进度：第 <span id="puzzle-index" style="color:var(--primary-color); font-weight:bold;">1</span> / 10 句
+            <div id="section-msg"></div>
+            <div style="font-size: 1.1rem; margin-bottom: 10px;">
+                当前章节进度：第 <span id="puzzle-index" style="color:var(--primary-color); font-weight:bold;">1</span> / <span id="puzzle-total">4</span> 句
             </div>
-            <p class="hint-text">点击下方字池中的字，按顺序拼出正确的句子（点击上方已选的字可撤销）：</p>
+            <p class="hint-text">点击下方字池中的字，按顺序拼出正确的句子（点击上方已选字可撤销）：</p>
             
             <div class="puzzle-target" id="puzzle-target"></div>
             <div class="puzzle-pool" id="puzzle-pool"></div>
@@ -297,47 +396,92 @@
     </div>
 
     <script>
-        // 切换 Tab 逻辑
+        let userName = "";
+
+        // 提交姓名
+        function submitName() {
+            const input = document.getElementById('username-input').value.trim();
+            if(!input) {
+                alert("请输入你的姓名！");
+                return;
+            }
+            userName = input;
+            document.getElementById('name-modal').style.display = 'none';
+            document.getElementById('welcome-msg').innerText = `同学：${userName}，祝你背诵闯关顺利！`;
+            initPuzzle();
+        }
+
+        // Tab 切换逻辑
         function switchTab(tabId) {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.container').forEach(con => con.classList.remove('active'));
             
             event.target.classList.add('active');
             document.getElementById(tabId).classList.add('active');
-
-            if(tabId === 'tab1') {
-                initPuzzle();
-            }
         }
 
-        // --- 第一关：字池拼句逻辑 ---
-        const puzzleSentences = [
-            "从小丘西行百二十步隔篁竹闻水声如鸣佩环心乐之",
-            "伐竹取道下见小潭水尤清冽",
-            "全石以为底近岸卷石底以出为坻为屿为嵁为岩",
-            "青树翠蔓蒙络摇缀参差披拂",
-            "潭中鱼可百许头皆若空游无所依日光下彻影布石上",
-            "佁然不动俶尔远逝往来翕忽似与游者相乐",
-            "潭西南而望斗折蛇行明灭可见",
-            "其岸势犬牙差互不可知其源",
-            "坐潭上四面竹树环合寂寥无人凄神寒骨悄怆幽邃",
-            "以其境过清不可久居乃记之而去"
-        ];
+        // --- 第一关：字池拼句（按节划分） ---
+        const sectionData = {
+            1: [
+                "从小丘西行百二十步隔篁竹闻水声如鸣佩环心乐之",
+                "伐竹取道下见小潭水尤清冽",
+                "全石以为底近岸卷石底以出为坻为屿为嵁为岩",
+                "青树翠蔓蒙络摇缀参差披拂"
+            ],
+            2: [
+                "潭中鱼可百许头皆若空游无所依日光下彻影布石上",
+                "佁然不动俶尔远逝往来翕忽似与游者相乐"
+            ],
+            3: [
+                "潭西南而望斗折蛇行明灭可见",
+                "其岸势犬牙差互不可知其源"
+            ],
+            4: [
+                "坐潭上四面竹树环合寂寥无人凄神寒骨悄怆幽邃",
+                "以其境过清不可久居乃记之而去"
+            ]
+        };
 
+        const sectionNames = { 1: "第一节", 2: "第二节", 3: "第三节", 4: "第四节" };
+
+        let currentSection = 1;
         let currentPuzzleIdx = 0;
         let currentTargetArr = [];
 
+        function selectSection(secNum) {
+            currentSection = secNum;
+            currentPuzzleIdx = 0;
+            
+            // 更新章节按钮样式
+            const btns = document.querySelectorAll('.sec-btn');
+            btns.forEach((btn, idx) => {
+                if(idx + 1 === secNum) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+
+            initPuzzle();
+        }
+
         function initPuzzle() {
-            if(currentPuzzleIdx >= puzzleSentences.length) {
-                document.getElementById('puzzle-target').innerHTML = "<h3 style='color:var(--success-color)'>🎉 恭喜你完成全部句子的字池拼句挑战！</h3>";
+            const list = sectionData[currentSection];
+            const msgBox = document.getElementById('section-msg');
+            msgBox.innerHTML = "";
+
+            if(currentPuzzleIdx >= list.length) {
+                // 完成该节任务提示
+                const chineseSec = sectionNames[currentSection];
+                msgBox.innerHTML = `<div class="success-banner">🎉 恭喜 ${userName} 完成${chineseSec}的拼句任务！</div>`;
+                document.getElementById('puzzle-target').innerHTML = "";
                 document.getElementById('puzzle-pool').innerHTML = "";
+                document.getElementById('next-puzzle-btn').style.display = 'none';
                 return;
             }
 
             document.getElementById('puzzle-index').innerText = currentPuzzleIdx + 1;
+            document.getElementById('puzzle-total').innerText = list.length;
             document.getElementById('next-puzzle-btn').style.display = 'none';
             
-            const rawSentence = puzzleSentences[currentPuzzleIdx];
+            const rawSentence = list[currentPuzzleIdx];
             currentTargetArr = [];
             
             let charList = rawSentence.split('');
@@ -391,7 +535,7 @@
 
         function checkPuzzleResult() {
             const currentStr = currentTargetArr.join('');
-            const targetStr = puzzleSentences[currentPuzzleIdx];
+            const targetStr = sectionData[currentSection][currentPuzzleIdx];
             
             if(currentStr === targetStr) {
                 document.getElementById('next-puzzle-btn').style.display = 'inline-block';
@@ -402,9 +546,6 @@
             currentPuzzleIdx++;
             initPuzzle();
         }
-
-        // 初始化加载第一关
-        initPuzzle();
 
         // --- 第二关：填空检测 ---
         function checkBlanks() {
@@ -428,7 +569,7 @@
                 const input = item.querySelector('.question-input');
                 const feedback = item.querySelector('.feedback');
                 const ans = input.getAttribute('data-ans');
-                const val = input.value.trim().replace(/，|。/g, ""); // 自动忽略标点差异
+                const val = input.value.trim().replace(/，|。/g, "");
                 const targetAns = ans.replace(/，|。/g, "");
 
                 if(val === targetAns) {
