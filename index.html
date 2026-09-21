@@ -37,7 +37,7 @@
         .subtitle {
             font-size: 1.1rem;
             color: #666;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
         /* 姓名输入遮罩层 */
@@ -282,7 +282,6 @@
             font-weight: bold;
         }
 
-        /* 成功提示框 */
         .success-banner {
             background: #e8f5e9;
             color: var(--success-color);
@@ -320,7 +319,6 @@
 
     <!-- 第一关：字池拼句 -->
     <div id="tab1" class="container active">
-        <!-- 分节入口导航 -->
         <div class="section-nav">
             <button class="sec-btn active" onclick="selectSection(1)">第一节</button>
             <button class="sec-btn" onclick="selectSection(2)">第二节</button>
@@ -349,50 +347,33 @@
     <div id="tab2" class="container">
         <p class="hint-text">请在横线上填写正确的字词：</p>
         <div class="fill-blank-text">
-            从小丘西行百二十步，隔篁竹，闻水声，<input type="text" class="blank-input" data-ans="如鸣佩环" style="width:100px;">，<input type="text" class="blank-input" data-ans="心乐之" style="width:80px;">。伐竹取道，下见小潭，<input type="text" class="blank-input" data-ans="水尤清冽" style="width:100px;">。<input type="text" class="blank-input" data-ans="全石以为底" style="width:130px;">，近岸，卷石底以出，为坻，为屿，为嵁，为岩。青树翠蔓，蒙络摇缀，参差披拂。<br><br>
-            潭中鱼可百许头，皆若空游无所依，日光下彻，<input type="text" class="blank-input" data-ans="影布石上" style="width:100px;">。<input type="text" class="blank-input" data-ans="佁然不动" style="width:100px;">，<input type="text" class="blank-input" data-ans="俶尔远逝，往来翕忽，似与游者相乐" style="width:300px;">。<br><br>
-            潭西南而望，斗折蛇行，明灭可见。其岸势犬牙差互，不可知其源。<br><br>
-            坐潭上，四面竹树环合，<input type="text" class="blank-input" data-ans="寂寥无人" style="width:100px;">，凄神寒骨，悄怆幽邃。<input type="text" class="blank-input" data-ans="以其境过清" style="width:130px;">，不可久居，乃记之而去。
+            <strong>第一节：</strong><br>
+            从小丘西行百二十步，隔篁竹，闻水声，<input type="text" class="blank-input" data-ans="如鸣佩环" style="width:110px;">，心乐之。<br>
+            伐竹取道，下见小潭，水尤清冽。<br>
+            全石以为底，近岸，卷石底以出，为坻，为屿，为嵁，为岩。<br>
+            <input type="text" class="blank-input" data-ans="青树翠蔓" style="width:110px;">，<input type="text" class="blank-input" data-ans="蒙络摇缀" style="width:110px;">，<input type="text" class="blank-input" data-ans="参差披拂" style="width:110px;">。<br><br>
+
+            <strong>第二节：</strong><br>
+            潭中鱼可百许头，皆若空游无所依，<input type="text" class="blank-input" data-ans="日光下彻" style="width:110px;">，<input type="text" class="blank-input" data-ans="影布石上" style="width:110px;">。<br>
+            佁然不动，俶尔远逝，往来翕忽，似与游者相乐。<br><br>
+
+            <strong>第三节：</strong><br>
+            潭西南而望，<input type="text" class="blank-input" data-ans="斗折蛇行" style="width:110px;">，<input type="text" class="blank-input" data-ans="明灭可见" style="width:110px;">。<br>
+            其岸势犬牙差互，不可知其源。<br><br>
+
+            <strong>第四节：</strong><br>
+            坐潭上，四面竹树环合，<input type="text" class="blank-input" data-ans="寂寥无人" style="width:110px;">，<input type="text" class="blank-input" data-ans="凄神寒骨" style="width:110px;">，<input type="text" class="blank-input" data-ans="悄怆幽邃" style="width:110px;">。<br>
+            以其境过清，不可久居，乃记之而去。
         </div>
         <button class="btn" onclick="checkBlanks()">核对答案</button>
     </div>
 
     <!-- 第三关：理解默写 -->
     <div id="tab3" class="container">
-        <p class="hint-text">结合情境理解，在横线上填写对应的课文原句：</p>
-        <div id="understanding-form">
-            <div class="question-item">
-                1. 《小石潭记》中作者对小石潭的总体感受（或写出环境氛围）的句子是：<br>
-                <input type="text" class="question-input" data-ans="凄神寒骨，悄怆幽邃">
-                <div class="feedback"></div>
-            </div>
-            <div class="question-item">
-                2. 《小石潭记》中表现溪水蜿蜒曲折、忽隐忽现的语句是：<br>
-                <input type="text" class="question-input" data-ans="斗折蛇行，明灭可见">
-                <div class="feedback"></div>
-            </div>
-            <div class="question-item">
-                3. 夸张地描写潭水极其清澈，侧面烘托水清的句子是：<br>
-                <input type="text" class="question-input" data-ans="潭中鱼可百许头，皆若空游无所依">
-                <div class="feedback"></div>
-            </div>
-            <div class="question-item">
-                4. 动态描写游鱼忽远忽近、轻快敏捷的句子是：<br>
-                <input type="text" class="question-input" data-ans="俶尔远逝，往来翕忽">
-                <div class="feedback"></div>
-            </div>
-            <div class="question-item">
-                5. 描写小石潭两岸岸势交错、重叠不齐的句子是：<br>
-                <input type="text" class="question-input" data-ans="其岸势犬牙差互">
-                <div class="feedback"></div>
-            </div>
-            <div class="question-item">
-                6. 描写小石潭四周青树翠蔓缠绕交错、随风摇曳的句子是：<br>
-                <input type="text" class="question-input" data-ans="青树翠蔓，蒙络摇缀，参差披拂">
-                <div class="feedback"></div>
-            </div>
-        </div>
+        <p class="hint-text">结合情境理解，在横线上填写对应的课文原句（每次加载已打乱顺序）：</p>
+        <div id="understanding-form"></div>
         <button class="btn" onclick="checkUnderstanding()">核对答案</button>
+        <button class="btn" style="background:#757575; margin-left:10px;" onclick="renderQuestions()">打乱顺序重做</button>
     </div>
 
     <script>
@@ -409,6 +390,7 @@
             document.getElementById('name-modal').style.display = 'none';
             document.getElementById('welcome-msg').innerText = `同学：${userName}，祝你背诵闯关顺利！`;
             initPuzzle();
+            renderQuestions();
         }
 
         // Tab 切换逻辑
@@ -420,7 +402,7 @@
             document.getElementById(tabId).classList.add('active');
         }
 
-        // --- 第一关：字池拼句（按节划分） ---
+        // --- 第一关：字池拼句 ---
         const sectionData = {
             1: [
                 "从小丘西行百二十步隔篁竹闻水声如鸣佩环心乐之",
@@ -452,7 +434,6 @@
             currentSection = secNum;
             currentPuzzleIdx = 0;
             
-            // 更新章节按钮样式
             const btns = document.querySelectorAll('.sec-btn');
             btns.forEach((btn, idx) => {
                 if(idx + 1 === secNum) btn.classList.add('active');
@@ -468,7 +449,6 @@
             msgBox.innerHTML = "";
 
             if(currentPuzzleIdx >= list.length) {
-                // 完成该节任务提示
                 const chineseSec = sectionNames[currentSection];
                 msgBox.innerHTML = `<div class="success-banner">🎉 恭喜 ${userName} 完成${chineseSec}的拼句任务！</div>`;
                 document.getElementById('puzzle-target').innerHTML = "";
@@ -549,7 +529,7 @@
 
         // --- 第二关：填空检测 ---
         function checkBlanks() {
-            const inputs = document.querySelectorAll('.blank-input');
+            const inputs = document.querySelectorAll('#tab2 .blank-input');
             inputs.forEach(input => {
                 const ans = input.getAttribute('data-ans');
                 const val = input.value.trim();
@@ -562,9 +542,36 @@
             });
         }
 
-        // --- 第三关：理解默写检测 ---
+        // --- 第三关：理解默写（已按要求调整题干并支持随机打乱） ---
+        const questionsData = [
+            { prompt: "作者对小石潭的总体感受（或写出环境氛围）的句子是：", ans: "凄神寒骨，悄怆幽邃" },
+            { prompt: "表现溪水蜿蜒曲折、忽隐忽现的语句是：", ans: "斗折蛇行，明灭可见" },
+            { prompt: "夸张地描写潭水极其清澈，侧面烘托水清的句子是：", ans: "潭中鱼可百许头，皆若空游无所依" },
+            { prompt: "动态描写游鱼忽远忽近、轻快敏捷的句子是：", ans: "俶尔远逝，往来翕忽" },
+            { prompt: "描写小石潭两岸岸势交错、重叠不齐的句子是：", ans: "其岸势犬牙差互" },
+            { prompt: "描写小石潭四周青树翠蔓缠绕交错、随风摇曳的句子是：", ans: "青树翠蔓，蒙络摇缀，参差披拂" }
+        ];
+
+        function renderQuestions() {
+            const container = document.getElementById('understanding-form');
+            container.innerHTML = "";
+            
+            let shuffled = [...questionsData].sort(() => Math.random() - 0.5);
+
+            shuffled.forEach((q, idx) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'question-item';
+                itemDiv.innerHTML = `
+                    ${idx + 1}. ${q.prompt}<br>
+                    <input type="text" class="question-input" data-ans="${q.ans}">
+                    <div class="feedback"></div>
+                `;
+                container.appendChild(itemDiv);
+            });
+        }
+
         function checkUnderstanding() {
-            const items = document.querySelectorAll('.question-item');
+            const items = document.querySelectorAll('#understanding-form .question-item');
             items.forEach(item => {
                 const input = item.querySelector('.question-input');
                 const feedback = item.querySelector('.feedback');
